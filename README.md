@@ -1,6 +1,6 @@
 # Optimization iOS Demo
 
-Two iOS demo apps that prove the [Contentful Optimization iOS SDK](https://github.com/contentful/optimization) can power a real app with Contentful personalization. Both apps are functionally and visually identical to the React Native reference app [`ContentfulDemoOptimized`](https://github.com/contentful/ReactNativeOptimizationDemo).
+Two iOS demo apps that prove the [Contentful Optimization iOS SDK](https://github.com/contentful/optimization) can power a real app with Contentful personalization. Both apps are functionally and visually identical to the React Native reference app [`ContentfulDemoOptimized`](https://github.com/Colorful-Team-Org/ReactNativeOptimizationDemo).
 
 - **SwiftUIDemo** — built with SwiftUI, uses the SDK's SwiftUI views (`OptimizationRoot`, `OptimizedEntry`, etc.)
 - **UIKitDemo** — built with UIKit, uses the SDK's core client API directly
