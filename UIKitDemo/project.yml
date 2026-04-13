@@ -1,4 +1,4 @@
-name: SwiftUIDemo
+name: UIKitDemo
 options:
   deploymentTarget:
     iOS: "16.0"
@@ -13,11 +13,11 @@ packages:
     from: 5.0.0
 
 targets:
-  SwiftUIDemo:
+  UIKitDemo:
     type: application
     platform: iOS
     sources:
-      - SwiftUIDemo
+      - UIKitDemo
     settings:
       base:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
@@ -32,7 +32,10 @@ targets:
         CURRENT_PROJECT_VERSION: 1
     preBuildScripts:
       - name: Build UMD Bundle
+        shell: /bin/zsh
         script: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           cd "$SRCROOT/../../optimization/packages/ios/ios-jsc-bridge"
           pnpm build
         basedOnDependencyAnalysis: false
