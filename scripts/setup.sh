@@ -77,12 +77,21 @@ if [[ ! -d "$SDK_DIR/.git" ]]; then
 else
   current_ref="$(git -C "$SDK_DIR" rev-parse --abbrev-ref HEAD)"
   if [[ "$MODE" == "update" ]]; then
+    stashed=0
     if [[ -n "$(git -C "$SDK_DIR" status --porcelain)" ]]; then
-      fail "$SDK_DIR has uncommitted changes. Commit or stash them, then re-run --update."
+      echo "Stashing local SDK changes (will reapply after pull)..."
+      git -C "$SDK_DIR" stash push -u -m "setup.sh --update auto-stash" >/dev/null
+      stashed=1
     fi
     echo "Fetching and fast-forwarding $current_ref..."
     git -C "$SDK_DIR" fetch --prune
     git -C "$SDK_DIR" pull --ff-only
+    if (( stashed )); then
+      echo "Reapplying stashed changes..."
+      if ! git -C "$SDK_DIR" stash pop; then
+        fail "Stash pop hit conflicts in $SDK_DIR. Resolve them, then 'git -C $SDK_DIR stash drop' when done."
+      fi
+    fi
   else
     echo "SDK already cloned (on $current_ref). Pass --update to pull latest."
   fi
