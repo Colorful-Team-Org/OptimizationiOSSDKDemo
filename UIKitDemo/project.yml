@@ -7,7 +7,7 @@ options:
 
 packages:
   ContentfulOptimization:
-    path: ../../optimization/packages/ios/ContentfulOptimization
+    path: ../optimization/packages/ios/ContentfulOptimization
   Contentful:
     url: https://github.com/contentful/contentful.swift
     from: 5.0.0
@@ -36,7 +36,7 @@ targets:
         script: |
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          cd "$SRCROOT/../../optimization/packages/ios/ios-jsc-bridge"
+          cd "$SRCROOT/../optimization/packages/ios/ios-jsc-bridge"
           pnpm build
         basedOnDependencyAnalysis: false
     dependencies:

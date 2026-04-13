@@ -7,7 +7,7 @@ options:
 
 packages:
   ContentfulOptimization:
-    path: ../../optimization/packages/ios/ContentfulOptimization
+    path: ../optimization/packages/ios/ContentfulOptimization
   Contentful:
     url: https://github.com/contentful/contentful.swift
     from: 5.0.0
@@ -33,7 +33,7 @@ targets:
     preBuildScripts:
       - name: Build UMD Bundle
         script: |
-          cd "$SRCROOT/../../optimization/packages/ios/ios-jsc-bridge"
+          cd "$SRCROOT/../optimization/packages/ios/ios-jsc-bridge"
           pnpm build
         basedOnDependencyAnalysis: false
     dependencies:
