@@ -5,7 +5,6 @@ import UIKit
 final class HomeViewController: UIViewController {
 
     private let client: OptimizationClient
-    private let variantLock: VariantLock
     private let tableView = UITableView(frame: .zero, style: .grouped)
     private let loadingContainer = UIView()
     private let errorContainer = UIView()
@@ -31,7 +30,6 @@ final class HomeViewController: UIViewController {
 
     init(client: OptimizationClient) {
         self.client = client
-        self.variantLock = VariantLock(client: client)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -47,6 +45,7 @@ final class HomeViewController: UIViewController {
         setupTableView()
         setupLoadingView()
         setupErrorView()
+        observePersonalizationChanges()
         Task { await fetchData() }
     }
 
@@ -162,6 +161,17 @@ final class HomeViewController: UIViewController {
 
     // MARK: - Actions
 
+    private func observePersonalizationChanges() {
+        client.$selectedPersonalizations
+            .dropFirst()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self, !self.tableView.isHidden else { return }
+                self.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+    }
+
     @objc private func handleRefresh() {
         Task {
             await fetchData()
@@ -266,7 +276,8 @@ extension HomeViewController: UITableViewDataSource {
 
         case .post(let index):
             let cell = tableView.dequeueReusableCell(withIdentifier: BlogPostCardCell.reuseIdentifier, for: indexPath) as! BlogPostCardCell
-            cell.configure(with: posts[index])
+            let resolved = client.personalizeEntry(baseline: posts[index], personalizations: client.selectedPersonalizations)
+            cell.configure(with: resolved.entry)
             return cell
 
         case .cta:
@@ -277,7 +288,7 @@ extension HomeViewController: UITableViewDataSource {
 
             let ctaView = CTAHeaderView()
             if let cta {
-                let resolved = variantLock.personalizeEntry(baseline: cta)
+                let resolved = client.personalizeEntry(baseline: cta, personalizations: client.selectedPersonalizations)
                 ctaView.configure(with: resolved.entry)
                 ctaView.onButtonTap = { [weak self] in
                     guard let self else { return }

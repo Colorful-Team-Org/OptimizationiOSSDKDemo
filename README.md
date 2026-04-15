@@ -5,7 +5,7 @@ Two iOS demo apps that prove the [Contentful Optimization iOS SDK](https://githu
 - **SwiftUIDemo** — built with SwiftUI, uses the SDK's SwiftUI views (`OptimizationRoot`, `OptimizedEntry`, etc.)
 - **UIKitDemo** — built with UIKit, uses the SDK's core client API directly
 
-Each app lives in its own directory with its own `xcodeproj` and imports the SDK locally via Swift Package Manager from `../../optimization/packages/ios/ContentfulOptimization`.
+Each app lives in its own directory with its own `xcodeproj` and imports the SDK as a local Swift Package. The SDK checkout is created by `./scripts/setup.sh` (see [Setup](#setup)) — you don't need to place it yourself.
 
 ## Repo layout
 
@@ -105,4 +105,4 @@ Same user-facing behavior in both:
 - Rich text documents arrive as nested `[String: Any]` with `nodeType`, `content`, `value`, and `marks` keys.
 - CTA hero image URL lives at `fields.media.fields.image.fields.file.url` and is protocol-relative — prefix with `https:`.
 - `OptimizationClient` is `@MainActor`; call it from lifecycle methods or wrap in `Task { @MainActor in ... }`.
-- The local SPM package path in each `project.yml` is `../optimization/packages/ios/ContentfulOptimization` (resolved against the SDK checkout that `./scripts/setup.sh` creates).
+- Each `project.yml` references the local SPM package from the SDK checkout that `./scripts/setup.sh` creates — no manual path configuration is required.
